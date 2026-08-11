@@ -4,6 +4,11 @@ node_modules/
 #Build output
 dist/
 
+# api tests
 request.rest
-/src/generated/prisma
+
+# drizzle
+drizzle/
+
+# Environment Variables
 .env

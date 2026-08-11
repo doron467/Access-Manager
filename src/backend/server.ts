@@ -1,49 +1,25 @@
 const port = 3000;
+const ACCESS_TOKEN_LIFETIME = "15m"
+const REFRESH_COOKIE_LIFETIME = 30 * 24 * 60 * 60 * 1000;
 
 import express from 'express';
 import bcrypt from 'bcrypt';
-import { db } from '../db/index.js';
-import { users } from '../db/schema.js'
+import crypto from 'crypto';
+import jwt from 'jsonwebtoken';
+import { db } from './db/index.js';
+import {users} from './db/schema/users.js'
+import {refreshTokens} from './db/schema/refreshTokens.js'
 import { eq } from 'drizzle-orm';
 import 'dotenv/config.js'
+import { errorHandler } from './middleware/errorHandler.js';
+import authRouter from './modules/auth/auth.routes.js'
 
 const app = express();
 
 app.use(express.json());
 
-type User = {
-    name: string;
-    password: string;
-}
+app.use('/auth', authRouter);
 
-const Users: User[] = []
-
-app.get('/users', (req, res) => {
-    res.json(Users)
-})
-
-app.post('/users', async (req, res) => {
-    const { name, password } = req.body;
-    const hashedPassword: string = await bcrypt.hash(password, 10);
-    const result = await db.insert(users).values({username: name, passwordHash: hashedPassword}).returning()
-    res.status(201).json({name: name});
-})
-
-app.post('/users/login', async (req, res) => {
-    const result = await db.select().from(users).where(eq(users.username, req.body.name));
-    const user = result[0];
-    if (!user) {
-        return res.status(400).json({ message: 'User not found' });
-    }
-    try {
-        if(await bcrypt.compare(req.body.password, user.passwordHash)){
-            res.send('Success');
-        } else {
-            res.send('Not Allowed');
-        }
-    } catch {
-        res.status(500).send()
-    }
-})
+app.use(errorHandler)
 
 app.listen(port)
