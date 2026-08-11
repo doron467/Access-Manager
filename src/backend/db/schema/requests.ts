@@ -1,20 +1,35 @@
 import {pgTable, uuid,timestamp, pgEnum} from "drizzle-orm/pg-core";
 import { users } from "./users.js";
+import {applications} from "./applications.js"
 
-export const requestStateEnum = pgEnum("request_state", [
-  "PENDING",
-  "APPROVED",
-  "REJECTED",
-]);
+export const requestStates = [
+    "PENDING",
+    "APPROVED",
+    "REJECTED"
+] as const;
 
-export const requestLevelEnum = pgEnum("request_levels", [
+export type RequestState = (typeof requestStates)[number];
+export const requestStateEnum = pgEnum("request_state", requestStates);
+
+
+export const requestLevels = [
   "READ",
-  "WRITE",
-]);
+  "WRITE"
+] as const;
+
+export type RequestLevel = (typeof requestLevels)[number];
+export const requestLevelEnum = pgEnum("request_levels", requestLevels);
 
 
 export const requests = pgTable("requests", {
   id: uuid("id").primaryKey().defaultRandom(),
+
+  appId: uuid("app_id")
+    .notNull()
+    .references(() => applications.id),
+
+  level: requestLevelEnum("level")
+    .notNull(),
 
   createdBy: uuid("created_by")
     .notNull()
@@ -33,6 +48,4 @@ export const requests = pgTable("requests", {
     .notNull()
     .default("PENDING"),
 
-  level: requestLevelEnum("level")
-    .notNull(),
 });

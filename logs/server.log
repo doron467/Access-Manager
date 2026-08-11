@@ -1,1 +1,19 @@
 normally I would put the logs in the .gitignore, but I decided to include them here for demonstration
+{"timestamp":"2026-08-11T16:48:03.523Z","level":"info","event":"user_register","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:01:17.529Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:05:51.884Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:08:36.830Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:12:20.399Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:13:58.639Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:15:30.786Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:17:49.984Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T17:18:00.838Z","level":"info","event":"request_creation","requestBy":"91922d5a-f7c4-4115-847b-39e7c77d42ea","appId":"76de6dd4-6f29-41c7-9ed2-038ebabeedf5","access_level":"READ"}
+{"timestamp":"2026-08-11T18:20:55.855Z","level":"info","event":"user_login","userId":"91922d5a-f7c4-4115-847b-39e7c77d42ea","username":"Him1"}
+{"timestamp":"2026-08-11T18:21:43.507Z","level":"info","event":"request_creation","requestBy":"91922d5a-f7c4-4115-847b-39e7c77d42ea","appId":"76de6dd4-6f29-41c7-9ed2-038ebabeedf5","access_level":"WRITE"}
+{"timestamp":"2026-08-11T18:22:09.470Z","level":"info","event":"request_creation","requestBy":"91922d5a-f7c4-4115-847b-39e7c77d42ea","appId":"dc2c6e2f-938e-47ee-adab-b84a2531eab2","access_level":"WRITE"}
+{"timestamp":"2026-08-11T18:22:16.192Z","level":"info","event":"request_creation","requestBy":"91922d5a-f7c4-4115-847b-39e7c77d42ea","appId":"dc2c6e2f-938e-47ee-adab-b84a2531eab2","access_level":"READ"}
+{"timestamp":"2026-08-11T19:34:26.843Z","level":"error","event":"request_error","method":"POST","path":"/auth/login","error":"Username doesn't exist","stack":"AppError: Username doesn't exist\n    at Module.loginUser (/home/the-him/Desktop/Access Manager/src/backend/modules/auth/auth.service.ts:42:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async loginUser (/home/the-him/Desktop/Access Manager/src/backend/modules/auth/auth.controller.ts:35:45)"}
+{"timestamp":"2026-08-11T19:34:32.959Z","level":"info","event":"user_login","userId":"35dea907-ab70-4d1b-961c-f274791cfc9a","username":"user2"}
+{"timestamp":"2026-08-11T19:35:33.319Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
+{"timestamp":"2026-08-11T19:40:10.599Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
+{"timestamp":"2026-08-11T19:43:49.570Z","level":"error","event":"request_error","method":"PATCH","path":"/requests/21c1e9d1-585e-4c48-b200-c4852f12d692","error":"Request does not exist or has already been decided","stack":"AppError: Request does not exist or has already been decided\n    at Module.updateDecision (/home/the-him/Desktop/Access Manager/src/backend/modules/requests/request.service.ts:72:15)\n    at process.processTicksAndRejections (node:internal/process/task_queues:103:5)\n    at async decideRequest (/home/the-him/Desktop/Access Manager/src/backend/modules/requests/request.controller.ts:116:25)"}
