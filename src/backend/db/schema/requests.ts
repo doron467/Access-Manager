@@ -7,9 +7,14 @@ export const requestStateEnum = pgEnum("request_state", [
   "REJECTED",
 ]);
 
+export const requestLevelEnum = pgEnum("request_levels", [
+  "READ",
+  "WRITE",
+]);
+
 
 export const requests = pgTable("requests", {
-  id: uuid("id").primaryKey(),
+  id: uuid("id").primaryKey().defaultRandom(),
 
   createdBy: uuid("created_by")
     .notNull()
@@ -26,5 +31,8 @@ export const requests = pgTable("requests", {
 
   state: requestStateEnum("state")
     .notNull()
-    .default("PENDING")
+    .default("PENDING"),
+
+  level: requestLevelEnum("level")
+    .notNull(),
 });

@@ -8,6 +8,7 @@ import { eq } from 'drizzle-orm';
 
 import 'dotenv/config.js'
 import { AppError } from '../../errors/AppError.js';
+import {logger} from '../../utils/logger.js';
 
 export async function registerUser(username: string, password: string) {
     // check if user already exists
@@ -21,7 +22,16 @@ export async function registerUser(username: string, password: string) {
     if (!user) {
         throw new AppError(400, "User creation failed");
     }
+
     const {accessToken, refreshToken} = await createSession(user.id)
+
+    logger.info("user_register",
+        {
+            userId: user.id,
+            username: user.username
+        }
+    )
+
     return {accessToken, refreshToken}
 }
 
@@ -36,6 +46,14 @@ export async function loginUser(username: string, password: string) {
         throw new AppError(401, "Wrong password");
     }
     const {accessToken, refreshToken} = await createSession(user.id);
+
+    logger.info("user_login",
+        {
+            userId: user.id,
+            username: user.username
+        }
+    )
+
     return {accessToken, refreshToken};
 }
 
