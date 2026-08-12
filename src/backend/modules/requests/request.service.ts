@@ -15,6 +15,26 @@ export async function createRequest(
   level: "READ" | "WRITE",
   reason: string
 ) {
+  const [existingRequest] = await db
+    .select({ id: requests.id })
+    .from(requests)
+    .where(
+      and(
+        eq(requests.createdBy, userId),
+        eq(requests.appId, appId),
+        eq(requests.level, level),
+        eq(requests.state, "PENDING")
+      )
+    )
+    .limit(1)
+
+  if (existingRequest) {
+    throw new AppError(
+      409,
+      "A pending request for this application and access level already exists"
+    )
+  }
+
   const [request] = await db
     .insert(requests)
     .values({

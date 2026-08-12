@@ -133,13 +133,6 @@ async function callLLM(prompt: string): Promise<string> {
     );
 
     if (!response.ok) {
-        const errorBody = await response.text();
-
-        console.error(
-            "OpenRouter error:",
-            response.status,
-            errorBody
-        );
         
         throw new AppError(502, "AI review failed");
     }
@@ -159,12 +152,13 @@ export async function analyzeAccessRequest(
   context: AccessRequestContext
 ): Promise<AIReview> {
 
-  console.log("getting response")
-
   const prompt = buildPrompt(context)
 
   const response = await callLLM(prompt)
   console.log(response)
 
   return parseResponse(response)
+
+  // use this instead for mocked results
+  //return {recommendation: "APPROVE",confidence: 0.7,reasoning: "test"}
 }

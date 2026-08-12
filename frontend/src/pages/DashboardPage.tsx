@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { RequestForm } from '../components/RequestForm'
 import { RequestTable } from '../components/RequestTable'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import type {
   AccessLevel,
   AccessRequest,

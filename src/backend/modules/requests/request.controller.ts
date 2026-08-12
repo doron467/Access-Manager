@@ -12,12 +12,38 @@ export const createRequest: RequestHandler = async (req, res,next) => {
             return res.status(401).send()
         }
 
-        const appId: string = req.body.appId;
-        const accessLevel: "READ" | "WRITE" = req.body.level;
-        const reason: string = req.body.reason;
+        const { appId, level, reason } = req.body ?? {};
+
+        if (typeof appId !== "string") {
+            res.status(400).json({ message: "appId must be a valid UUID" });
+            return;
+        }
+
+        if (level !== "READ" && level !== "WRITE") {
+            res.status(400).json({ message: "Level must be READ or WRITE" });
+            return;
+        }
+
+        if (
+            typeof reason !== "string" ||
+            reason.trim().length === 0 ||
+            reason.length > 500
+        ) {
+            res.status(400).json({
+                message: "Reason must be between 1 and 500 characters",
+            });
+            return;
+        }
+
+        const accessLevel: "READ" | "WRITE" = level;
         const userId = req.user.id;
 
-        const request = await requestService.createRequest(userId,appId,accessLevel,reason)
+        const request = await requestService.createRequest(
+            userId,
+            appId,
+            accessLevel,
+            reason.trim()
+        )
 
         res.status(201).json(request)
         

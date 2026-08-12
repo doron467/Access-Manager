@@ -105,22 +105,23 @@ approver.
 
 # Requirements
 
-The following software is required to run the project locally:
+The backend and frontend run locally. Docker Compose is used only to run
+PostgreSQL.
 
-- Node.js
+The following software is required:
+
+- Node.js `20.19+` or `22.12+`
 - npm
+- Docker and Docker Compose
 
-For the Docker setup:
-
-- Docker
-- Docker Compose
+No Dockerfile is required for the backend or frontend.
 
 ---
 
 
 # Running the Project
 
-##  Run PostgreSQL Using Docker
+## Run PostgreSQL Using Docker
 
 Start the PostgreSQL container:
 
@@ -139,7 +140,7 @@ The database URL should therefore be:
 
 ---
 
-## Install Dependencies
+## Install Backend Dependencies
 
 From the project root:
 
@@ -149,8 +150,12 @@ From the project root:
 
 ## Set .env
 
-paste your openrouter api key in the .env.example file.
-rename file to .env
+Copy the environment template without modifying the tracked example file:
+
+    cp .env.example .env
+
+Set `OPENROUTER_API_KEY` in `.env`. The remaining values are configured for
+the PostgreSQL container above.
 
 ---
 
@@ -183,11 +188,16 @@ Then start the compiled server:
 
 # Running the Frontend
 
-The React frontend is run separately from the Express backend.
+The React frontend runs separately from the Express backend. In a second
+terminal:
 
-In a separate terminal, navigate to the frontend, and type: 
-
+    cd frontend
+    npm install
     npm run dev
+
+The frontend is available at `http://localhost:5173` and is preconfigured to
+call the backend at `http://localhost:3000` through
+`frontend/.env` (`VITE_API_URL`).
 
 ---
 
