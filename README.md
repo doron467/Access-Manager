@@ -29,7 +29,7 @@ The system also includes an AI-powered agent that can analyze access requests an
 # Architecture
 
 ## High-Level Architecture
-
+```mermaid
     flowchart TD
         Frontend[React + TypeScript Frontend]
         Backend[Express Backend]
@@ -50,9 +50,11 @@ The system also includes an AI-powered agent that can analyze access requests an
         AI --> DB
         AI --> LLM
         AI --> Evaluation[AI Review Evaluation]
+```
 
 ## Backend Architecture
 
+```mermaid
     flowchart TD
         Routes[Express Routes]
         Middleware[Middleware]
@@ -64,6 +66,7 @@ The system also includes an AI-powered agent that can analyze access requests an
         Middleware --> Controllers
         Controllers --> Services
         Services --> Database
+```
 
 The backend follows a layered architecture.
 
