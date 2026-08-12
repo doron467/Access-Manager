@@ -35,6 +35,7 @@ function buildPrompt(context: AccessRequestContext): string {
     ACCESS REQUEST:
     Access level: ${context.request.accessLevel}
     State: ${context.request.state}
+    Reason for request: ${context.request.reason}
     Created at: ${context.request.createdAt.toISOString()}
 
     RECOMMENDATION OPTIONS:

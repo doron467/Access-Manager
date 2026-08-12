@@ -1,4 +1,4 @@
-import {pgTable, uuid,timestamp, pgEnum, text} from "drizzle-orm/pg-core";
+import {pgTable, uuid,timestamp, pgEnum, varchar} from "drizzle-orm/pg-core";
 import { users } from "./users.js";
 import {applications} from "./applications.js"
 
@@ -31,7 +31,7 @@ export const requests = pgTable("requests", {
   level: requestLevelEnum("level")
     .notNull(),
 
-  reason: text("reason")
+  reason: varchar("reason", { length: 500 })
     .notNull(),
 
   createdBy: uuid("created_by")

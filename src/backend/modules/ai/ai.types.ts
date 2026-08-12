@@ -2,6 +2,7 @@ export interface AccessRequestContext {
   request: {
     id: string
     accessLevel: 'READ' | 'WRITE'
+    reason: string
     state: 'PENDING' | 'APPROVED' | 'REJECTED'
     createdAt: Date
   }
