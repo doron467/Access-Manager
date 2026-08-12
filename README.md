@@ -6,26 +6,6 @@ The system also includes an AI-powered agent that can analyze access requests an
 
 ---
 
-## Features
-
-- User registration and login
-- JWT-based authentication
-- Refresh-token based sessions
-- Role-based authorization
-- Requester and approver roles
-- Application access requests
-- Access levels (`READ` / `WRITE`)
-- Request filtering
-- Request approval/rejection
-- Request audit information
-- Structured server-side logging
-- AI-assisted access request reviews
-- AI response validation and evaluation
-- PostgreSQL database
-- Dockerized PostgreSQL development environment
-
----
-
 # Architecture
 
 ## High-Level Architecture
@@ -207,7 +187,7 @@ The React frontend is run separately from the Express backend.
 
 In a separate terminal, navigate to the frontend, and type: 
 
-npm run dev
+    npm run dev
 
 ---
 
