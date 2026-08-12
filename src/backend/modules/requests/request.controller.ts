@@ -14,9 +14,10 @@ export const createRequest: RequestHandler = async (req, res,next) => {
 
         const appId: string = req.body.appId;
         const accessLevel: "READ" | "WRITE" = req.body.level;
+        const reason: string = req.body.reason;
         const userId = req.user.id;
 
-        const request = await requestService.createRequest(userId,appId,accessLevel)
+        const request = await requestService.createRequest(userId,appId,accessLevel,reason)
 
         res.status(201).json(request)
         

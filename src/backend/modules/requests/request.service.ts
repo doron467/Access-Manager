@@ -12,13 +12,15 @@ import { AppError } from '../../errors/AppError.js';
 export async function createRequest(
   userId: string,
   appId: string,
-  level: "READ" | "WRITE"
+  level: "READ" | "WRITE",
+  reason: string
 ) {
   const [request] = await db
     .insert(requests)
     .values({
       appId,
       level,
+      reason,
       createdBy: userId,
     })
     .returning()
@@ -74,6 +76,7 @@ export async function getRequests(
       appId: requests.appId,
       level: requests.level,
       state: requests.state,
+      reason: requests.reason,
 
       createdBy: requests.createdBy,
       createdByUsername: createdByUser.username,

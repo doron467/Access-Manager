@@ -114,7 +114,6 @@ export async function logout(refreshToken: string) {
 async function createSession(id: string) {
     const accessLifetime = process.env.ACCESS_TOKEN_LIFETIME_MINUTES!;
     const accessLifetimeS = parseInt(accessLifetime) * 60; // convert minutes to seconds
-    console.log("lifetime: ", accessLifetimeS)
 
     const refreshLifetime = process.env.REFRESH_TOKEN_LIFETIME_DAYS!;
     const refreshLifetimeMS = parseInt(refreshLifetime) * 24 * 60 * 60 * 1000; // convert days to milliseconds

@@ -85,11 +85,12 @@ export function DashboardPage() {
   async function handleCreateRequest(
     appId: string,
     level: AccessLevel,
+    reason: string
   ) {
     try {
       setActionError(null)
 
-      await createRequest(appId, level)
+      await createRequest(appId, level, reason)
 
       const results = await listRequests({
         state: stateFilter || undefined,

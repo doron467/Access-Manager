@@ -42,6 +42,7 @@ export function RequestTable({
           <tr>
             <th>App</th>
             <th>Access level</th>
+            <th>Reason</th>
             <th>State</th>
             <th>Created by</th>
             <th>Created at</th>
@@ -55,6 +56,7 @@ export function RequestTable({
             <tr key={request.id}>
               <td>{resolveAppName(request.appId, applications)}</td>
               <td>{request.level}</td>
+              <td>{request.reason}</td>
               <td>
                 <StatusBadge state={request.state} />
               </td>

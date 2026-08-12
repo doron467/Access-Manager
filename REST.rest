@@ -42,4 +42,9 @@ Content-Type: application/json
     "level": "READ"
 }
 
+###
+
+POST http://localhost:3000/ai/requests/3c48b8b5-142f-4316-bdb7-ffab931a2d61/review
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiMTQxYTgwLTY5ODEtNGQzZC04MjQwLTMyOWU1ZTJjZmNlYiIsImlhdCI6MTc4NjUzODQxMywiZXhwIjoxNzg2NTM5MzEzfQ.qKXSg3u9I3rEkfSdWgp1JuK0OXzHkbotg_FYkI2Zaa8
+
 

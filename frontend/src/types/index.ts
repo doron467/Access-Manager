@@ -23,6 +23,7 @@ export interface AccessRequest {
   appId: string
   level: AccessLevel
   state: RequestState
+  reason: string
   createdBy: string
   createdByUsername: string
   createdAt: string

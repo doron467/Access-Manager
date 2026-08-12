@@ -1,20 +1,15 @@
-import { useEffect, useState, type FormEvent } from 'react'
+import { useState, type FormEvent } from 'react'
 import type { AccessLevel, Application } from '../types'
 
 interface RequestFormProps {
   applications: Application[]
-  onSubmit: (appId: string, level: AccessLevel) => void
+  onSubmit: (appId: string, level: AccessLevel, reason: string) => void
 }
 
 export function RequestForm({ applications, onSubmit }: RequestFormProps) {
-  const [appId, setAppId] = useState('')
+  const [appId, setAppId] = useState(applications[0]?.id ?? '')
   const [level, setLevel] = useState<AccessLevel>('READ')
-
-  useEffect(() => {
-    if (!appId && applications.length > 0) {
-      setAppId(applications[0].id)
-    }
-  }, [applications, appId])
+  const [reason, setReason] = useState('')
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
@@ -23,7 +18,11 @@ export function RequestForm({ applications, onSubmit }: RequestFormProps) {
       return
     }
 
-    onSubmit(appId, level)
+    if (!reason.trim()) {
+      return
+    }
+
+    onSubmit(appId, level, reason.trim())
   }
 
   return (
@@ -56,6 +55,16 @@ export function RequestForm({ applications, onSubmit }: RequestFormProps) {
             <option value="READ">Read</option>
             <option value="WRITE">Write</option>
           </select>
+        </label>
+
+        <label className="field">
+          <span>Reason</span>
+          <textarea
+            value={reason}
+            onChange={(event) => setReason(event.target.value)}
+            placeholder="Why do you need access to this application?"
+            rows={4}
+          />
         </label>
 
         <button type="submit" className="btn btn-primary">

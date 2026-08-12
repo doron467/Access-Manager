@@ -31,6 +31,9 @@ export const requests = pgTable("requests", {
   level: requestLevelEnum("level")
     .notNull(),
 
+  reason: text("reason")
+    .notNull(),
+
   createdBy: uuid("created_by")
     .notNull()
     .references(() => users.id),

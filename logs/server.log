@@ -67,3 +67,7 @@ normally I would put the logs in the .gitignore, but I decided to include them h
 {"timestamp":"2026-08-12T12:40:13.857Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
 {"timestamp":"2026-08-12T12:40:37.031Z","level":"info","event":"ai_request_review","requestId":"3c48b8b5-142f-4316-bdb7-ffab931a2d61","reviewerId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","recommendation":"APPROVE","confidence":0.9,"evaluationPassed":true,"evaluationIssues":[]}
 {"timestamp":"2026-08-12T12:41:08.880Z","level":"info","event":"ai_request_review","requestId":"3c48b8b5-142f-4316-bdb7-ffab931a2d61","reviewerId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","recommendation":"APPROVE","confidence":0.85,"evaluationPassed":true,"evaluationIssues":[]}
+{"timestamp":"2026-08-12T13:01:42.469Z","level":"info","event":"request_creation","requestBy":"e832ff91-7b18-4289-9b0b-e1407291381c","appId":"c434b29e-8268-4fc8-9f30-affeeb5ad41e","access_level":"WRITE"}
+{"timestamp":"2026-08-12T13:02:10.129Z","level":"info","event":"request_creation","requestBy":"e832ff91-7b18-4289-9b0b-e1407291381c","appId":"c434b29e-8268-4fc8-9f30-affeeb5ad41e","access_level":"WRITE"}
+{"timestamp":"2026-08-12T13:02:56.156Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
+{"timestamp":"2026-08-12T13:11:31.687Z","level":"info","event":"user_login","userId":"35dea907-ab70-4d1b-961c-f274791cfc9a","username":"user2"}

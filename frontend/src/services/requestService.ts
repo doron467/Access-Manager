@@ -59,12 +59,14 @@ export async function listRequests(
 export async function createRequest(
   appId: string,
   level: AccessLevel,
+  reason: string
 ): Promise<void> {
   const response = await apiFetch('/requests/create', {
     method: 'POST',
     body: JSON.stringify({
       appId,
       level,
+      reason
     }),
   })
 
