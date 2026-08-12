@@ -46,3 +46,6 @@ normally I would put the logs in the .gitignore, but I decided to include them h
 {"timestamp":"2026-08-12T18:35:20.694Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
 {"timestamp":"2026-08-12T18:35:39.161Z","level":"info","event":"request_creation","requestBy":"8b141a80-6981-4d3d-8240-329e5e2cfceb","appId":"494b86c5-f6ef-4afc-9616-4cc19a5c43bc","access_level":"READ"}
 {"timestamp":"2026-08-12T18:47:17.913Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
+{"timestamp":"2026-08-12T21:12:25.821Z","level":"info","event":"user_login","userId":"0628c5e7-543b-4c90-b320-4df04e8118a0","username":"user1"}
+{"timestamp":"2026-08-12T21:13:28.693Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
+{"timestamp":"2026-08-12T21:15:35.384Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}

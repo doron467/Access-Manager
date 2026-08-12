@@ -251,7 +251,7 @@ Authentication: Not required.
 
 ### Response
 
-200 OK
+201 OK
 
     {
       "accessToken": "<access-token>",
@@ -442,6 +442,10 @@ Authentication: Required.
     {
       "recommendation": "APPROVE",
       "confidence": 0.87,
+      "evaluation": {
+            "valid": true,
+            "issues": []
+      },
       "reasoning": "The requested access appears consistent with the user's stated reason and the application's purpose."
     }
 

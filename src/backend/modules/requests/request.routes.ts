@@ -7,7 +7,7 @@ import { authorize } from '../../middleware/authorize.js';
 
 
 
-requestsRoute.post('/create',authenticateToken,createRequest)
+requestsRoute.post('/create',authenticateToken,authorize("REQUESTER"),createRequest)
 
 requestsRoute.get('/',authenticateToken,getRequest)
 
