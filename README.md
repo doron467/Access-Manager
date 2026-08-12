@@ -224,7 +224,6 @@ Authentication: Not required.
 
     {
       "accessToken": "<access-token>",
-      "refreshToken": "<refresh-token>",
       "userInfo": {
         "id": "<user-id>",
         "username": "john",
@@ -255,7 +254,6 @@ Authentication: Not required.
 
     {
       "accessToken": "<access-token>",
-      "refreshToken": "<refresh-token>",
       "userInfo": {
         "id": "<user-id>",
         "username": "john",

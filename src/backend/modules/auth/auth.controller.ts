@@ -19,6 +19,7 @@ export const registerUser: RequestHandler = async (req, res,next) => {
             httpOnly: true,
             secure: isProduction,
             sameSite: 'lax',
+            maxAge: refreshLifetimeMS,
         })
 
         res.status(201).json({accessToken: result.accessToken, userInfo: result.userInfo});
@@ -46,6 +47,7 @@ export const loginUser: RequestHandler = async (req, res,next) => {
             httpOnly: true,
             secure: isProduction,
             sameSite: 'lax',
+            maxAge: refreshLifetimeMS,
         })
 
         res.status(201).json({accessToken: result.accessToken,userInfo: result.userInfo});

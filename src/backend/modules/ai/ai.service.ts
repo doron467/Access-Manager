@@ -102,6 +102,14 @@ export async function reviewRequest(
 function evaluateReview(review: AIReview) {
     const issues: string[] = [];
 
+    if (review.confidence < 0.6) {
+        issues.push('Low-confidence recommendation')
+    }
+
+    if (review.reasoning.trim().length < 30) {
+        issues.push('Reasoning is too short to be useful')
+    }
+
     return {
         valid: issues.length === 0,
         issues,
