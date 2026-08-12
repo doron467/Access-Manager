@@ -6,21 +6,22 @@ export const registerUser: RequestHandler = async (req, res,next) => {
     try {
         const name: string = req.body.name;
         const password: string = req.body.password;
-        const {accessToken, refreshToken} = await authService.registerUser(
+        const result = await authService.registerUser(
             name,password
         );
 
         const refreshLifetime = process.env.REFRESH_TOKEN_LIFETIME_DAYS!;
         const refreshLifetimeMS = parseInt(refreshLifetime) * 24 * 60 * 60 * 1000; // convert days to milliseconds
 
-        res.cookie("refreshToken",refreshToken, {
+        const isProduction = process.env.NODE_ENV === 'production'
+
+        res.cookie('refreshToken', result.refreshToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: refreshLifetimeMS
+            secure: isProduction,
+            sameSite: 'lax',
         })
 
-        res.status(201).json({accessToken: accessToken});
+        res.status(201).json({accessToken: result.accessToken, userInfo: result.userInfo});
         
     } catch (error) {
         next(error);
@@ -32,21 +33,22 @@ export const loginUser: RequestHandler = async (req, res,next) => {
     try {
         const username: string = req.body.name;
         const password: string = req.body.password;
-        const {accessToken, refreshToken} = await authService.loginUser(
+        const result = await authService.loginUser(
             username,password
         );
 
         const refreshLifetime = process.env.REFRESH_TOKEN_LIFETIME_DAYS!;
         const refreshLifetimeMS = parseInt(refreshLifetime) * 24 * 60 * 60 * 1000; // convert days to milliseconds
+        
+        const isProduction = process.env.NODE_ENV === 'production'
 
-        res.cookie("refreshToken",refreshToken, {
+        res.cookie('refreshToken', result.refreshToken, {
             httpOnly: true,
-            secure: true,
-            sameSite: 'strict',
-            maxAge: refreshLifetimeMS
+            secure: isProduction,
+            sameSite: 'lax',
         })
 
-        res.status(201).json({accessToken: accessToken});
+        res.status(201).json({accessToken: result.accessToken,userInfo: result.userInfo});
         
     } catch (error) {
         next(error);
@@ -63,6 +65,49 @@ export const refreshAccessToken: RequestHandler = async (req, res,next) => {
 
         res.status(201).json({accessToken: accessToken});
         
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getMe: RequestHandler = async (req, res,next) => {
+
+    try {
+        
+        if (!req.user){
+            return res.sendStatus(401)
+        }
+
+        return res.json({
+            id: req.user.id,
+            role: req.user.role,
+            username: req.user.username
+        })
+        
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+export const logout: RequestHandler = async (req, res,next) => {
+
+    try {
+        
+        const refreshToken = req.cookies.refreshToken
+
+        if (refreshToken) {
+            await authService.logout(refreshToken)
+        }
+
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: 'lax',
+        })
+
+        res.status(204).send()
+
     } catch (error) {
         next(error);
     }

@@ -1,9 +1,14 @@
-import { useMemo, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Navigate } from 'react-router-dom'
 import { RequestForm } from '../components/RequestForm'
 import { RequestTable } from '../components/RequestTable'
 import { useAuth } from '../context/AuthContext'
-import type { AccessLevel, RequestState } from '../types'
+import type {
+  AccessLevel,
+  AccessRequest,
+  Application,
+  RequestState,
+} from '../types'
 import {
   createRequest,
   decideRequest,
@@ -11,50 +16,123 @@ import {
   listRequests,
 } from '../services/requestService'
 
+
 export function DashboardPage() {
   const { user } = useAuth()
-  const [refreshKey, setRefreshKey] = useState(0)
+
+  const [applications, setApplications] = useState<Application[]>([])
+  const [requests, setRequests] = useState<AccessRequest[]>([])
+
   const [stateFilter, setStateFilter] = useState<RequestState | ''>('')
   const [appFilter, setAppFilter] = useState('')
   const [levelFilter, setLevelFilter] = useState<AccessLevel | ''>('')
+
+  const [loading, setLoading] = useState(true)
   const [actionError, setActionError] = useState<string | null>(null)
 
-  const applications = useMemo(() => getApplications(), [])
 
   if (!user) {
     return <Navigate to="/login" replace />
   }
 
-  const requests = useMemo(
-    () =>
-      listRequests(user, {
+
+  useEffect(() => {
+    async function loadApplications() {
+      try {
+        const apps = await getApplications()
+        setApplications(apps)
+      } catch (error) {
+        setActionError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to load applications.',
+        )
+      }
+    }
+
+    loadApplications()
+  }, [])
+
+
+  useEffect(() => {
+    async function loadRequests() {
+      setLoading(true)
+
+      try {
+        const results = await listRequests({
+          state: stateFilter || undefined,
+          appId: appFilter || undefined,
+          level: levelFilter || undefined,
+        })
+
+        setRequests(results)
+        setActionError(null)
+      } catch (error) {
+        setActionError(
+          error instanceof Error
+            ? error.message
+            : 'Failed to load requests.',
+        )
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadRequests()
+  }, [stateFilter, appFilter, levelFilter])
+
+
+  async function handleCreateRequest(
+    appId: string,
+    level: AccessLevel,
+  ) {
+    try {
+      setActionError(null)
+
+      await createRequest(appId, level)
+
+      const results = await listRequests({
         state: stateFilter || undefined,
         appId: appFilter || undefined,
         level: levelFilter || undefined,
-      }),
-    [user, stateFilter, appFilter, levelFilter, refreshKey],
-  )
+      })
 
-  function refresh() {
-    setRefreshKey((value) => value + 1)
-  }
-
-  function handleCreateRequest(appId: string, level: AccessLevel) {
-    createRequest(user, appId, level)
-    setActionError(null)
-    refresh()
-  }
-
-  function handleDecide(requestId: string, state: 'APPROVED' | 'REJECTED') {
-    const result = decideRequest(user, requestId, state)
-    if ('error' in result) {
-      setActionError(result.error)
-      return
+      setRequests(results)
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : 'Failed to create request.',
+      )
     }
-
-    setActionError(null)
-    refresh()
   }
+
+
+  async function handleDecide(
+    requestId: string,
+    state: 'APPROVED' | 'REJECTED',
+  ) {
+    try {
+      setActionError(null)
+
+      await decideRequest(requestId, state)
+
+      const results = await listRequests({
+        state: stateFilter || undefined,
+        appId: appFilter || undefined,
+        level: levelFilter || undefined,
+      })
+
+      setRequests(results)
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : 'Failed to update request.',
+      )
+    }
+  }
+
 
   return (
     <div className="dashboard">
@@ -69,21 +147,34 @@ export function DashboardPage() {
         </div>
       </div>
 
+
       {user.role === 'REQUESTER' && (
-        <RequestForm applications={applications} onSubmit={handleCreateRequest} />
+        <RequestForm
+          applications={applications}
+          onSubmit={handleCreateRequest}
+        />
       )}
+
 
       <section className="panel">
         <div className="panel-header">
-          <h2>{user.role === 'REQUESTER' ? 'My requests' : 'All requests'}</h2>
+          <h2>
+            {user.role === 'REQUESTER'
+              ? 'My requests'
+              : 'All requests'}
+          </h2>
+
 
           <div className="filters">
             <label className="field field-inline">
               <span>State</span>
+
               <select
                 value={stateFilter}
                 onChange={(event) =>
-                  setStateFilter(event.target.value as RequestState | '')
+                  setStateFilter(
+                    event.target.value as RequestState | '',
+                  )
                 }
               >
                 <option value="">All</option>
@@ -93,13 +184,18 @@ export function DashboardPage() {
               </select>
             </label>
 
+
             <label className="field field-inline">
               <span>App</span>
+
               <select
                 value={appFilter}
-                onChange={(event) => setAppFilter(event.target.value)}
+                onChange={(event) =>
+                  setAppFilter(event.target.value)
+                }
               >
                 <option value="">All</option>
+
                 {applications.map((app) => (
                   <option key={app.id} value={app.id}>
                     {app.name}
@@ -108,12 +204,16 @@ export function DashboardPage() {
               </select>
             </label>
 
+
             <label className="field field-inline">
               <span>Level</span>
+
               <select
                 value={levelFilter}
                 onChange={(event) =>
-                  setLevelFilter(event.target.value as AccessLevel | '')
+                  setLevelFilter(
+                    event.target.value as AccessLevel | '',
+                  )
                 }
               >
                 <option value="">All</option>
@@ -124,14 +224,26 @@ export function DashboardPage() {
           </div>
         </div>
 
-        {actionError && <p className="form-error">{actionError}</p>}
 
-        <RequestTable
-          requests={requests}
-          applications={applications}
-          user={user}
-          onDecide={user.role === 'APPROVER' ? handleDecide : undefined}
-        />
+        {actionError && (
+          <p className="form-error">{actionError}</p>
+        )}
+
+
+        {loading ? (
+          <p>Loading requests...</p>
+        ) : (
+          <RequestTable
+            requests={requests}
+            applications={applications}
+            user={user}
+            onDecide={
+              user.role === 'APPROVER'
+                ? handleDecide
+                : undefined
+            }
+          />
+        )}
       </section>
     </div>
   )

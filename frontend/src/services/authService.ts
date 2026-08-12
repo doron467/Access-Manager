@@ -1,36 +1,22 @@
 import type { AuthUser } from '../types'
-import {
-  addUser,
-  clearSession,
-  findUserByUsername,
-  generateId,
-  loadSession,
-  saveSession,
-} from './mockStore'
+import { apiFetch, setAccessToken } from './api'
 
-export function getCurrentUser(): AuthUser | null {
-  const session = loadSession()
-  if (!session) {
+
+export async function getCurrentUser(): Promise<AuthUser | null> {
+  const response = await apiFetch('/auth/me')
+
+  if (!response.ok) {
     return null
   }
 
-  const user = findUserByUsername(session.username)
-  if (!user) {
-    clearSession()
-    return null
-  }
-
-  return {
-    id: user.id,
-    username: user.username,
-    role: user.role,
-  }
+  return await response.json()
 }
 
-export function register(
+
+export async function register(
   username: string,
   password: string,
-): { user: AuthUser } | { error: string } {
+): Promise<{ user: AuthUser } | { error: string }> {
   const trimmedUsername = username.trim()
 
   if (!trimmedUsername) {
@@ -41,50 +27,70 @@ export function register(
     return { error: 'Password must be at least 4 characters.' }
   }
 
-  if (findUserByUsername(trimmedUsername)) {
-    return { error: 'Username is already taken.' }
+  const response = await apiFetch('/auth/register', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: trimmedUsername,
+      password,
+    }),
+  })
+
+  if (!response.ok) {
+    const data = await response.json()
+    return { error: data.message ?? 'Registration failed.' }
   }
 
-  const newUser = {
-    id: generateId('u'),
-    username: trimmedUsername,
-    password,
-    role: 'REQUESTER' as const,
-    createdAt: new Date().toISOString(),
+  const data = await response.json()
+
+  setAccessToken(data.accessToken)
+
+  return {
+    user: data.userInfo,
   }
-
-  addUser(newUser)
-
-  const authUser: AuthUser = {
-    id: newUser.id,
-    username: newUser.username,
-    role: newUser.role,
-  }
-
-  saveSession(authUser)
-  return { user: authUser }
 }
 
-export function login(
+
+export async function login(
   username: string,
   password: string,
-): { user: AuthUser } | { error: string } {
-  const user = findUserByUsername(username.trim())
+): Promise<{ user: AuthUser } | { error: string }> {
+  const trimmedUsername = username.trim()
 
-  if (!user || user.password !== password) {
-    return { error: 'Invalid username or password.' }
+  if (!trimmedUsername) {
+    return { error: 'Username is required.' }
   }
 
-  const authUser: AuthUser = {
-    id: user.id,
-    username: user.username,
-    role: user.role,
+  if (!password) {
+    return { error: 'Password is required.' }
   }
 
-  saveSession(authUser)
-  return { user: authUser }
+  const response = await apiFetch('/auth/login', {
+    method: 'POST',
+    body: JSON.stringify({
+      name: trimmedUsername,
+      password,
+    }),
+  })
+
+  if (!response.ok) {
+    const data = await response.json()
+    return { error: data.message ?? 'Invalid username or password.' }
+  }
+
+  const data = await response.json()
+
+  setAccessToken(data.accessToken)
+
+  return {
+    user: data.userInfo,
+  }
 }
 
-export function logout(): void {
-  clearSession()
+
+export async function logout(): Promise<void> {
+  await apiFetch('/auth/logout', {
+    method: 'POST',
+  })
+
+  setAccessToken(null)
 }

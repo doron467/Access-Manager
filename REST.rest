@@ -1,0 +1,45 @@
+POST http://localhost:3000/auth/login
+Content-Type: application/json
+
+{
+    "name": "user1",
+    "password": "1234"
+}
+
+###
+
+POST Http://localhost:3000/auth/register
+Content-Type: application/json
+
+{
+    "name": "user5",
+    "password": "qwerty"
+}
+
+###
+
+GET http://localhost:3000/requests/apps
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiMTQxYTgwLTY5ODEtNGQzZC04MjQwLTMyOWU1ZTJjZmNlYiIsImlhdCI6MTc4NjUyNzg5NSwiZXhwIjoxNzg2NTI4Nzk1fQ.YxOPwM0ECeVcqSIlrdW9a5BYFnJB1YkV764b0cw6s4M
+
+
+###
+
+GET http://localhost:3000/auth/me
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiMTQxYTgwLTY5ODEtNGQzZC04MjQwLTMyOWU1ZTJjZmNlYiIsImlhdCI6MTc4NjUyNTU0NSwiZXhwIjoxNzg2NTI2NDQ1fQ.-nKn8orINr3YxPMvkJNDzAGg4u7qhNwuh4IZpdafZvw
+
+
+###
+GET http://localhost:3000/requests
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiMTQxYTgwLTY5ODEtNGQzZC04MjQwLTMyOWU1ZTJjZmNlYiIsImlhdCI6MTc4NjUyODg4OCwiZXhwIjoxNzg2NTI5Nzg4fQ.ghgMzW3ne76WA2YetGW5AfQ6V9FJlZ9NwCBIJ_0p8TQ
+
+###
+POST http://localhost:3000/requests/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4MzJmZjkxLTdiMTgtNDI4OS05YjBiLWUxNDA3MjkxMzgxYyIsImlhdCI6MTc4NjUyODY5NCwiZXhwIjoxNzg2NTI5NTk0fQ.HKa-EddphO48fZC_BhL9bCRfDaIj2aGSHsWT7Rztko8
+Content-Type: application/json
+
+{
+    "appId": "dcddbcbe-a429-428b-bc75-fc44f5339992",
+    "level": "READ"
+}
+
+

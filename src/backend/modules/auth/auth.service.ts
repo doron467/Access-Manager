@@ -28,11 +28,21 @@ export async function registerUser(username: string, password: string) {
     logger.info("user_register",
         {
             userId: user.id,
-            username: user.username
+            username: user.username,
+            role: user.role
         }
     )
 
-    return {accessToken, refreshToken}
+    //return {accessToken, refreshToken}
+    return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        userInfo: {
+            id: user.id,
+            username: user.username,
+            role: user.role
+        }
+    }
 }
 
 export async function loginUser(username: string, password: string) {
@@ -54,7 +64,16 @@ export async function loginUser(username: string, password: string) {
         }
     )
 
-    return {accessToken, refreshToken};
+    //return {accessToken, refreshToken};
+    return {
+        accessToken: accessToken,
+        refreshToken: refreshToken,
+        userInfo: {
+            id: user.id,
+            username: user.username,
+            role: user.role
+        }
+    }
 }
 
 export async function refreshAccessToken(refreshToken: string) {
@@ -72,12 +91,24 @@ export async function refreshAccessToken(refreshToken: string) {
     const accessLifetime = process.env.ACCESS_TOKEN_LIFETIME_MINUTES!;
     const accessLifetimeS = parseInt(accessLifetime) * 60; // convert minutes to seconds
     const accessToken = jwt.sign(
-    { userId: storedToken.userId },
-    process.env.JWT_SECRET!,
+    {id: storedToken.userId },
+    process.env.ACCESS_TOKEN_SECRET!,
     { expiresIn: accessLifetimeS }
     );
 
     return {accessToken}
+}
+
+function hashRefreshToken(refreshToken: string){
+    return crypto.createHash('sha256').update(refreshToken).digest('hex');
+}
+
+export async function logout(refreshToken: string) {
+  const hashedToken = hashRefreshToken(refreshToken)
+
+  await db
+    .delete(refreshTokens)
+    .where(eq(refreshTokens.tokenHash, hashedToken))
 }
 
 async function createSession(id: string) {
@@ -90,7 +121,8 @@ async function createSession(id: string) {
 
     const accessToken = jwt.sign({id: id}, process.env.ACCESS_TOKEN_SECRET!, {expiresIn: accessLifetimeS})
     const refreshToken = crypto.randomBytes(64).toString('hex');
-    const tokenHash = crypto.createHash('sha256').update(refreshToken).digest('hex');
+    const tokenHash = hashRefreshToken(refreshToken)
     await db.insert(refreshTokens).values({userId: id,tokenHash: tokenHash, expiresAt: new Date(Date.now() + refreshLifetimeMS)});
     return {accessToken, refreshToken}
 }
+

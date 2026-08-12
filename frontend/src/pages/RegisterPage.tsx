@@ -10,7 +10,7 @@ export function RegisterPage() {
   const [confirmPassword, setConfirmPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     setError(null)
 
@@ -29,7 +29,8 @@ export function RegisterPage() {
       return
     }
 
-    const registerError = register(username, password)
+    const registerError = await register(username, password)
+
     if (registerError) {
       setError(registerError)
       return

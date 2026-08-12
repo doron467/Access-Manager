@@ -16,9 +16,9 @@ export const createRequest: RequestHandler = async (req, res,next) => {
         const accessLevel: "READ" | "WRITE" = req.body.level;
         const userId = req.user.id;
 
-        requestService.createRequest(userId,appId,accessLevel)
+        const request = await requestService.createRequest(userId,appId,accessLevel)
 
-        res.status(201).send()
+        res.status(201).json(request)
         
         
     } catch (error) {
@@ -92,7 +92,7 @@ export const decideRequest: RequestHandler = async (req, res,next) => {
     try {
 
         if (!req.user){
-            logger.warn("get_request")
+            logger.warn("decide_request")
             return res.status(401).send()
         }
 
@@ -120,6 +120,25 @@ export const decideRequest: RequestHandler = async (req, res,next) => {
         );
 
         res.status(200).json(request);
+        
+        
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getApplications: RequestHandler = async (req, res,next) => {
+
+    try {
+
+        if (!req.user){
+            logger.warn("get_apps")
+            return res.status(401).send()
+        }
+
+        const apps = await requestService.getApplications();
+
+        res.json(apps)
         
         
     } catch (error) {

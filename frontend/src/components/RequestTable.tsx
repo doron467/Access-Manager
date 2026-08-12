@@ -1,4 +1,3 @@
-import { findUserById } from '../services/mockStore'
 import type { AccessRequest, Application, AuthUser } from '../types'
 import { StatusBadge } from './StatusBadge'
 
@@ -18,14 +17,6 @@ function formatDate(value: string | null): string {
     dateStyle: 'medium',
     timeStyle: 'short',
   })
-}
-
-function resolveUsername(userId: string | null): string {
-  if (!userId) {
-    return '—'
-  }
-
-  return findUserById(userId)?.username ?? 'Unknown'
 }
 
 function resolveAppName(appId: string, applications: Application[]): string {
@@ -67,9 +58,9 @@ export function RequestTable({
               <td>
                 <StatusBadge state={request.state} />
               </td>
-              <td>{resolveUsername(request.createdBy)}</td>
+              <td>{request.createdByUsername}</td>
               <td>{formatDate(request.createdAt)}</td>
-              <td>{resolveUsername(request.decisionBy)}</td>
+              <td>{request.decisionByUsername ?? '—'}</td>
               <td>{formatDate(request.decisionAt)}</td>
               {showActions && (
                 <td>

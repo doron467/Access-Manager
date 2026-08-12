@@ -24,9 +24,11 @@ export interface AccessRequest {
   level: AccessLevel
   state: RequestState
   createdBy: string
+  createdByUsername: string
   createdAt: string
   decisionBy: string | null
   decisionAt: string | null
+  decisionByUsername: string | null
 }
 
 export interface RequestFilters {

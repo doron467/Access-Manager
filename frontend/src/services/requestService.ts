@@ -1,95 +1,93 @@
 import type {
   AccessLevel,
   AccessRequest,
-  AuthUser,
+  Application,
   RequestFilters,
   RequestState,
 } from '../types'
-import {
-  addRequest,
-  generateId,
-  getApplications,
-  getRequests,
-  updateRequest,
-} from './mockStore'
+import { apiFetch } from './api'
 
-export { getApplications }
 
-export function listRequests(
-  user: AuthUser,
+export async function getApplications(): Promise<Application[]> {
+  const response = await apiFetch('/requests/apps')
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message ?? 'Failed to fetch applications')
+  }
+
+  return await response.json()
+}
+
+
+export async function listRequests(
   filters: RequestFilters = {},
-): AccessRequest[] {
-  let results = getRequests()
+): Promise<AccessRequest[]> {
+  const params = new URLSearchParams()
 
-  if (user.role === 'REQUESTER') {
-    results = results.filter((request) => request.createdBy === user.id)
-  } else if (filters.requesterId) {
-    results = results.filter(
-      (request) => request.createdBy === filters.requesterId,
-    )
+  if (filters.requesterId) {
+    params.set('requesterId', filters.requesterId)
   }
 
   if (filters.level) {
-    results = results.filter((request) => request.level === filters.level)
+    params.set('level', filters.level)
   }
 
   if (filters.state) {
-    results = results.filter((request) => request.state === filters.state)
+    params.set('state', filters.state)
   }
 
   if (filters.appId) {
-    results = results.filter((request) => request.appId === filters.appId)
+    params.set('appId', filters.appId)
   }
 
-  return results.sort(
-    (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+  const queryString = params.toString()
+
+  const response = await apiFetch(
+    `/requests${queryString ? `?${queryString}` : ''}`,
   )
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message ?? 'Failed to fetch requests')
+  }
+
+  return await response.json()
 }
 
-export function createRequest(
-  user: AuthUser,
+
+export async function createRequest(
   appId: string,
   level: AccessLevel,
-): AccessRequest {
-  const request: AccessRequest = {
-    id: generateId('r'),
-    appId,
-    level,
-    state: 'PENDING',
-    createdBy: user.id,
-    createdAt: new Date().toISOString(),
-    decisionBy: null,
-    decisionAt: null,
-  }
-
-  addRequest(request)
-  return request
-}
-
-export function decideRequest(
-  user: AuthUser,
-  requestId: string,
-  state: Extract<RequestState, 'APPROVED' | 'REJECTED'>,
-): AccessRequest | { error: string } {
-  const existing = getRequests().find((request) => request.id === requestId)
-
-  if (!existing) {
-    return { error: 'Request not found.' }
-  }
-
-  if (existing.state !== 'PENDING') {
-    return { error: 'This request has already been decided.' }
-  }
-
-  const updated = updateRequest(requestId, {
-    state,
-    decisionBy: user.id,
-    decisionAt: new Date().toISOString(),
+): Promise<void> {
+  const response = await apiFetch('/requests/create', {
+    method: 'POST',
+    body: JSON.stringify({
+      appId,
+      level,
+    }),
   })
 
-  if (!updated) {
-    return { error: 'Failed to update request.' }
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message ?? 'Failed to create request')
   }
+}
 
-  return updated
+
+export async function decideRequest(
+  requestId: string,
+  state: Extract<RequestState, 'APPROVED' | 'REJECTED'>,
+): Promise<void> {
+  const response = await apiFetch(`/requests/${requestId}`, {
+    method: 'PATCH',
+    body: JSON.stringify({
+      state,
+    }),
+  })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message ?? 'Failed to decide request')
+  }
 }
