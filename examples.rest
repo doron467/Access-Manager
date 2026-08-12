@@ -8,7 +8,7 @@ Content-Type: application/json
 
 ###
 
-POST Http://localhost:3000/auth/register
+POST http://localhost:3000/auth/register
 Content-Type: application/json
 
 {
@@ -34,17 +34,18 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiMTQxYTgwL
 
 ###
 POST http://localhost:3000/requests/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6ImU4MzJmZjkxLTdiMTgtNDI4OS05YjBiLWUxNDA3MjkxMzgxYyIsImlhdCI6MTc4NjUyODY5NCwiZXhwIjoxNzg2NTI5NTk0fQ.HKa-EddphO48fZC_BhL9bCRfDaIj2aGSHsWT7Rztko8
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjA2MjhjNWU3LTU0M2ItNGM5MC1iMzIwLTRkZjA0ZTgxMThhMCIsImlhdCI6MTc4NjU1OTU0NSwiZXhwIjoxNzg2NTYwNDQ1fQ.dqMjB6wBX5IMtOidNIMtj7hTpxaDQM7eMQQ6RIesOpk
 Content-Type: application/json
 
 {
-    "appId": "dcddbcbe-a429-428b-bc75-fc44f5339992",
-    "level": "READ"
+    "appId": "494b86c5-f6ef-4afc-9616-4cc19a5c43bc",
+    "level": "READ",
+    "reason": "hello world"
 }
 
 ###
 
-POST http://localhost:3000/ai/requests/1e51f17a-ba78-4cd7-91b4-58be118d14ca/review
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiMTQxYTgwLTY5ODEtNGQzZC04MjQwLTMyOWU1ZTJjZmNlYiIsImlhdCI6MTc4NjU0NjY0OSwiZXhwIjoxNzg2NTQ3NTQ5fQ.sW2E6iF5tC6ra5AvkphiTm1PN0WR7LUC0aUWicOpaSI
+POST http://localhost:3000/ai/requests/7bfda555-fd94-4ff5-8443-89956dfe8954/review
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjhiMTQxYTgwLTY5ODEtNGQzZC04MjQwLTMyOWU1ZTJjZmNlYiIsImlhdCI6MTc4NjU1MDA4MiwiZXhwIjoxNzg2NTUwOTgyfQ.DUe4Fxk0TuAsGIK2B9_VxUV93GEkmE9qnmtqn8IWWQw
 
 

@@ -42,3 +42,7 @@ normally I would put the logs in the .gitignore, but I decided to include them h
 {"timestamp":"2026-08-12T16:02:16.266Z","level":"info","event":"request_creation","requestBy":"35dea907-ab70-4d1b-961c-f274791cfc9a","appId":"a6b3f43e-67ff-4771-bad9-45546be7161e","access_level":"WRITE"}
 {"timestamp":"2026-08-12T16:02:23.203Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
 {"timestamp":"2026-08-12T17:36:29.919Z","level":"info","event":"user_login","userId":"0628c5e7-543b-4c90-b320-4df04e8118a0","username":"user1"}
+{"timestamp":"2026-08-12T18:32:25.075Z","level":"info","event":"user_login","userId":"0628c5e7-543b-4c90-b320-4df04e8118a0","username":"user1"}
+{"timestamp":"2026-08-12T18:35:20.694Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
+{"timestamp":"2026-08-12T18:35:39.161Z","level":"info","event":"request_creation","requestBy":"8b141a80-6981-4d3d-8240-329e5e2cfceb","appId":"494b86c5-f6ef-4afc-9616-4cc19a5c43bc","access_level":"READ"}
+{"timestamp":"2026-08-12T18:47:17.913Z","level":"info","event":"user_login","userId":"8b141a80-6981-4d3d-8240-329e5e2cfceb","username":"user1"}
