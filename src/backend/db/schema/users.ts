@@ -3,7 +3,6 @@ import {pgTable, varchar, uuid, pgEnum, timestamp} from "drizzle-orm/pg-core";
 export const roles = [
     "REQUESTER",
     "APPROVER",
-    "ADMIN"
 ] as const;
 
 export type UserRole = (typeof roles)[number];
