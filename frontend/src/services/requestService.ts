@@ -1,6 +1,7 @@
 import type {
   AccessLevel,
   AccessRequest,
+  AIReview,
   Application,
   RequestFilters,
   RequestState,
@@ -92,4 +93,17 @@ export async function decideRequest(
     const data = await response.json()
     throw new Error(data.message ?? 'Failed to decide request')
   }
+}
+
+export async function reviewRequest(requestId: string): Promise<AIReview> {
+  const response = await apiFetch(`/ai/requests/${requestId}/review`, {
+    method: 'POST',
+  })
+
+  if (!response.ok) {
+    const data = await response.json()
+    throw new Error(data.message ?? 'Failed to get AI review')
+  }
+
+  return await response.json()
 }

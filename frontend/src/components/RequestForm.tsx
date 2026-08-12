@@ -3,18 +3,20 @@ import type { AccessLevel, Application } from '../types'
 
 interface RequestFormProps {
   applications: Application[]
-  onSubmit: (appId: string, level: AccessLevel, reason: string) => void
+  onSubmit: (appId: string, level: AccessLevel, reason: string) => Promise<boolean>
 }
 
 export function RequestForm({ applications, onSubmit }: RequestFormProps) {
   const [appId, setAppId] = useState(applications[0]?.id ?? '')
   const [level, setLevel] = useState<AccessLevel>('READ')
   const [reason, setReason] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const selectedAppId = appId || applications[0]?.id || ''
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    if (!appId) {
+    if (!selectedAppId) {
       return
     }
 
@@ -22,7 +24,14 @@ export function RequestForm({ applications, onSubmit }: RequestFormProps) {
       return
     }
 
-    onSubmit(appId, level, reason.trim())
+    setSubmitting(true)
+    const created = await onSubmit(selectedAppId, level, reason.trim())
+    setSubmitting(false)
+
+    if (created) {
+      setReason('')
+      setLevel('READ')
+    }
   }
 
   return (
@@ -33,7 +42,7 @@ export function RequestForm({ applications, onSubmit }: RequestFormProps) {
         <label className="field">
           <span>Application</span>
           <select
-            value={appId}
+            value={selectedAppId}
             onChange={(event) => setAppId(event.target.value)}
           >
             {applications.map((app) => (
@@ -67,8 +76,8 @@ export function RequestForm({ applications, onSubmit }: RequestFormProps) {
           />
         </label>
 
-        <button type="submit" className="btn btn-primary">
-          Submit request
+        <button type="submit" className="btn btn-primary" disabled={submitting || !selectedAppId}>
+          {submitting ? 'Submitting…' : 'Submit request'}
         </button>
       </form>
     </section>

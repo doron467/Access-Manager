@@ -44,3 +44,13 @@ export interface AuthUser {
   username: string
   role: UserRole
 }
+
+export interface AIReview {
+  recommendation: 'APPROVE' | 'REJECT' | 'REVIEW'
+  confidence: number
+  reasoning: string
+  evaluation: {
+    valid: boolean
+    issues: string[]
+  }
+}

@@ -1,10 +1,5 @@
-import { OpenRouter } from "@openrouter/sdk";
 import type { AccessRequestContext, AIReview } from "./ai.types.js";
 import { AppError } from "../../errors/AppError.js";
-
-const openrouter = new OpenRouter({
-    apiKey: process.env.OPENROUTER_API_KEY,
-});
 
 function buildPrompt(context: AccessRequestContext): string {
     return `
@@ -138,6 +133,14 @@ async function callLLM(prompt: string): Promise<string> {
     );
 
     if (!response.ok) {
+        const errorBody = await response.text();
+
+        console.error(
+            "OpenRouter error:",
+            response.status,
+            errorBody
+        );
+        
         throw new AppError(502, "AI review failed");
     }
 
@@ -156,9 +159,12 @@ export async function analyzeAccessRequest(
   context: AccessRequestContext
 ): Promise<AIReview> {
 
+  console.log("getting response")
+
   const prompt = buildPrompt(context)
 
   const response = await callLLM(prompt)
+  console.log(response)
 
   return parseResponse(response)
 }

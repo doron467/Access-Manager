@@ -6,6 +6,8 @@ interface RequestTableProps {
   applications: Application[]
   user: AuthUser
   onDecide?: (requestId: string, state: 'APPROVED' | 'REJECTED') => void
+  onRequestReview?: (request: AccessRequest) => void
+  reviewingRequestId?: string | null
 }
 
 function formatDate(value: string | null): string {
@@ -28,6 +30,8 @@ export function RequestTable({
   applications,
   user,
   onDecide,
+  onRequestReview,
+  reviewingRequestId,
 }: RequestTableProps) {
   const showActions = user.role === 'APPROVER' && onDecide
 
@@ -81,6 +85,16 @@ export function RequestTable({
                         onClick={() => onDecide(request.id, 'REJECTED')}
                       >
                         Deny
+                      </button>
+                      <button
+                        type="button"
+                        className="btn btn-secondary btn-sm"
+                        onClick={() => onRequestReview?.(request)}
+                        disabled={reviewingRequestId === request.id}
+                      >
+                        {reviewingRequestId === request.id
+                          ? 'Analyzing…'
+                          : 'Ask AI'}
                       </button>
                     </div>
                   ) : (

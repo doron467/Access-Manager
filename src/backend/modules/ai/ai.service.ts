@@ -61,6 +61,7 @@ export async function reviewRequest(
             id: request.id,
             accessLevel: request.level,
             state: request.state,
+            reason: request.reason,
             createdAt: request.createdAt,
         },
 

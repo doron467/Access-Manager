@@ -6,6 +6,7 @@ import { useAuth } from '../context/AuthContext'
 import type {
   AccessLevel,
   AccessRequest,
+  AIReview,
   Application,
   RequestState,
 } from '../types'
@@ -14,6 +15,7 @@ import {
   decideRequest,
   getApplications,
   listRequests,
+  reviewRequest,
 } from '../services/requestService'
 
 
@@ -29,15 +31,20 @@ export function DashboardPage() {
 
   const [loading, setLoading] = useState(true)
   const [actionError, setActionError] = useState<string | null>(null)
-
-
-  if (!user) {
-    return <Navigate to="/login" replace />
-  }
+  const [actionSuccess, setActionSuccess] = useState<string | null>(null)
+  const [reviewingRequestId, setReviewingRequestId] = useState<string | null>(null)
+  const [aiReview, setAiReview] = useState<{
+    request: AccessRequest
+    review: AIReview
+  } | null>(null)
 
 
   useEffect(() => {
     async function loadApplications() {
+      if (!user) {
+        return
+      }
+
       try {
         const apps = await getApplications()
         setApplications(apps)
@@ -51,11 +58,15 @@ export function DashboardPage() {
     }
 
     loadApplications()
-  }, [])
+  }, [user])
 
 
   useEffect(() => {
     async function loadRequests() {
+      if (!user) {
+        return
+      }
+
       setLoading(true)
 
       try {
@@ -79,7 +90,7 @@ export function DashboardPage() {
     }
 
     loadRequests()
-  }, [stateFilter, appFilter, levelFilter])
+  }, [user, stateFilter, appFilter, levelFilter])
 
 
   async function handleCreateRequest(
@@ -89,6 +100,7 @@ export function DashboardPage() {
   ) {
     try {
       setActionError(null)
+      setActionSuccess(null)
 
       await createRequest(appId, level, reason)
 
@@ -99,12 +111,15 @@ export function DashboardPage() {
       })
 
       setRequests(results)
+      setActionSuccess('Access request submitted successfully.')
+      return true
     } catch (error) {
       setActionError(
         error instanceof Error
           ? error.message
           : 'Failed to create request.',
       )
+      return false
     }
   }
 
@@ -115,6 +130,7 @@ export function DashboardPage() {
   ) {
     try {
       setActionError(null)
+      setActionSuccess(null)
 
       await decideRequest(requestId, state)
 
@@ -132,6 +148,28 @@ export function DashboardPage() {
           : 'Failed to update request.',
       )
     }
+  }
+
+  async function handleRequestReview(request: AccessRequest) {
+    try {
+      setActionError(null)
+      setActionSuccess(null)
+      setReviewingRequestId(request.id)
+      const review = await reviewRequest(request.id)
+      setAiReview({ request, review })
+    } catch (error) {
+      setActionError(
+        error instanceof Error
+          ? error.message
+          : 'Failed to get AI review.',
+      )
+    } finally {
+      setReviewingRequestId(null)
+    }
+  }
+
+  if (!user) {
+    return <Navigate to="/login" replace />
   }
 
 
@@ -154,6 +192,10 @@ export function DashboardPage() {
           applications={applications}
           onSubmit={handleCreateRequest}
         />
+      )}
+
+      {actionSuccess && (
+        <p className="form-success" role="status">{actionSuccess}</p>
       )}
 
 
@@ -243,9 +285,69 @@ export function DashboardPage() {
                 ? handleDecide
                 : undefined
             }
+            onRequestReview={
+              user.role === 'APPROVER'
+                ? handleRequestReview
+                : undefined
+            }
+            reviewingRequestId={reviewingRequestId}
           />
         )}
       </section>
+
+      {aiReview && (
+        <div
+          className="modal-backdrop"
+          role="presentation"
+          onMouseDown={() => setAiReview(null)}
+        >
+          <section
+            className="ai-review-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="ai-review-title"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="ai-review-header">
+              <div>
+                <p className="ai-review-eyebrow">AI analysis</p>
+                <h2 id="ai-review-title">Access request recommendation</h2>
+              </div>
+              <button
+                type="button"
+                className="btn btn-secondary btn-sm"
+                onClick={() => setAiReview(null)}
+              >
+                Close
+              </button>
+            </div>
+            <p className="ai-review-request">
+              Request for <strong>{aiReview.request.createdByUsername}</strong>
+            </p>
+            <dl className="ai-review-summary">
+              <div>
+                <dt>Recommendation</dt>
+                <dd>
+                  <span className={`ai-recommendation ai-recommendation--${aiReview.review.recommendation.toLowerCase()}`}>
+                    {aiReview.review.recommendation.toLowerCase()}
+                  </span>
+                </dd>
+              </div>
+              <div>
+                <dt>Confidence</dt>
+                <dd>{Math.round(aiReview.review.confidence * 100)}%</dd>
+              </div>
+            </dl>
+            <div className="ai-review-reasoning">
+              <h3>Analysis</h3>
+              <p>{aiReview.review.reasoning}</p>
+            </div>
+            <p className="ai-review-disclaimer">
+              This is a recommendation only. The final access decision remains yours.
+            </p>
+          </section>
+        </div>
+      )}
     </div>
   )
 }
