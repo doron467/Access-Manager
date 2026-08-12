@@ -1,4 +1,0 @@
-{"timestamp":"2026-08-12T22:49:51.247Z","level":"info","event":"request_creation","requestBy":"d559a814-1bcd-4a91-a81d-c1071efeee5a","appId":"05a7af83-845e-4dbb-8a43-614feb0a9aa6","access_level":"READ"}
-{"timestamp":"2026-08-12T22:49:55.822Z","level":"info","event":"user_login","userId":"0628c5e7-543b-4c90-b320-4df04e8118a0","username":"user1"}
-{"timestamp":"2026-08-12T22:50:52.807Z","level":"info","event":"ai_request_review","requestId":"382cef22-182f-46c6-8c02-f91ddd41ad27","reviewerId":"0628c5e7-543b-4c90-b320-4df04e8118a0","recommendation":"REVIEW","confidence":0.85,"evaluationPassed":true,"evaluationIssues":[]}
-{"timestamp":"2026-08-12T22:51:30.246Z","level":"info","event":"ai_request_review","requestId":"382cef22-182f-46c6-8c02-f91ddd41ad27","reviewerId":"0628c5e7-543b-4c90-b320-4df04e8118a0","recommendation":"APPROVE","confidence":0.7,"evaluationPassed":false,"evaluationIssues":["Reasoning is too short to be useful"]}

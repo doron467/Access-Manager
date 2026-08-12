@@ -5,14 +5,16 @@ import { users } from "./schema/users.js";
 import type { UserRole } from "./schema/users.js";
 
 const applicationData = [
-    { name: "GitHub", description: "version control stuff"},
-    { name: "Google Drive", description: "upload stuff to the cloud"},
-    { name: "AWS", description: "server deployment"},
+    { name: "GitHub", description: "an open source app to upload important projects"},
+    { name: "Google Drive", description: "used for uploading non-secret images"},
+    { name: "Test app", description: "an app currently in development, no user should be allowed write access to it"},
 ];
 
 const usersData: {username: string, passwordHash: string, role: UserRole}[] = [
     {username: "user1", passwordHash: "1234", role: "APPROVER"},
     {username: "user2", passwordHash: "abcd", role: "REQUESTER"},
+    {username: "user3", passwordHash: "qwerty", role: "APPROVER"},
+    {username: "user4", passwordHash: "asdf", role: "REQUESTER"},
 ]
 
 async function seed() {

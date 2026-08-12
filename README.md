@@ -157,6 +157,11 @@ Copy the environment template without modifying the tracked example file:
 Set `OPENROUTER_API_KEY` in `.env`. The remaining values are configured for
 the PostgreSQL container above.
 
+Make sure to also set the frontend's .env file.
+Create frontend/.env, and inside it:
+
+    VITE_API_URL=http://localhost:3000
+
 ---
 
 ## Initialize the Database
