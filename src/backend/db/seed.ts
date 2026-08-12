@@ -5,9 +5,9 @@ import { users } from "./schema/users.js";
 import type { UserRole } from "./schema/users.js";
 
 const applicationData = [
-    { name: "App 1", description: "version control stuff"},
-    { name: "App 2", description: "upload stuff to the cloud"},
-    { name: "App 3", description: "server deployment"},
+    { name: "GitHub", description: "version control stuff"},
+    { name: "Google Drive", description: "upload stuff to the cloud"},
+    { name: "AWS", description: "server deployment"},
 ];
 
 const usersData: {username: string, passwordHash: string, role: UserRole}[] = [
