@@ -7,5 +7,6 @@ export const applications = pgTable("applications", {
       .notNull()
       .unique(),
 
-    description: text("description"),
+    description: text("description")
+      .notNull(),
 })
