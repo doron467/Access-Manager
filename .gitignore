@@ -10,3 +10,10 @@ drizzle/
 
 # Environment Variables
 .env
+
+# ai
+.agents/
+.codex/
+
+# coverage
+.coverage/

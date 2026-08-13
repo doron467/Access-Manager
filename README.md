@@ -206,6 +206,20 @@ call the backend at `http://localhost:3000` through
 
 ---
 
+# Test Files
+
+Please note that the test files are running on the same database as the normal app. Running the test files will delete all of your current data.
+
+To run the test files:
+
+    npm run test
+
+To restore the seeded data:
+
+    npm run seed
+
+---
+
 # API Documentation
 
 Please note that additional examples are provided in the examples.rest file
